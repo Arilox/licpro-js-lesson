@@ -9,6 +9,9 @@ import {
 } from "spectacle";
 
 import CodeSlide from 'spectacle-code-slide';
+import Terminal from "spectacle-terminal";
+
+import Typist from "react-typist";
 
 // Import theme
 import createTheme from "spectacle/lib/themes/default";
@@ -60,9 +63,12 @@ const images = {
   component3_2: require('../assets/component3-2.png'),
   component4: require('../assets/component4.png'),
   component5: require('../assets/component5.png'),
+  event_loop: require('../assets/images/event_loop.png'),
+  http_message: require('../assets/images/http_message.jpg'),
+  http_header: require('../assets/images/http_header.jpg'),
 };
 
-
+const cursor = { show: false, blink: true, element: "|", hideWhenDone: false, hideWhenDoneDelay: 500 };
 
 class Example3_1 extends React.Component {
   changeColor(color) {
@@ -215,7 +221,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={1} caps>Why Javascript ?</Heading>
           <Notes>
-            Expliquer où on trouve du js :
+            Expliquer où se trouve du js :
             <ul>
               <li>navigateur</li>
               <li>serveur</li>
@@ -728,7 +734,7 @@ console.log(foor.lastName);"
                 <li>Transformer un objet en son annotation json</li>
                 <li>La function n'est pas présente.</li>
                 <li>Le JSON c'est du texte</li>
-                <li>Attention à la syntaxe</li>
+                <li>Atention à la syntaxe</li>
               </ul>
             </Notes>
         </Slide>
@@ -935,7 +941,7 @@ console.log(foor.lastName);"
             <Notes>
               <ul>
                 <li>obj.method = passe la définition de la method</li>
-                <li>obj.method() = Passe la valeur renvoyée par l'execution</li>
+                <li>obj.method() = Passe la valeur renvoyée par l'exécution</li>
                 <li>Result : Method : undefined</li>
               </ul>
             </Notes>
@@ -1147,6 +1153,13 @@ yarn install"
               margin="20px auto"
               overflow = "overflow"
               />
+            <Notes>
+              <ul>
+                <li>
+                  --production pour ne pas installer des dépendances de dev
+                </li>
+              </ul>
+            </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <Heading size={1} caps>package.json</Heading>
@@ -1163,20 +1176,124 @@ yarn run myCommand"
             margin="20px auto"
             overflow = "overflow"
             />
-            <Notes>
-              <ul>
-                <li>
-                  --production pour pas installer des dépendances de dev
-                </li>
-              </ul>
-            </Notes>
+          <Notes>
+            <ul>
+              <li>
+                Comme un makefile
+              </li>
+            </ul>
+          </Notes>
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>Semver</Heading>
+          <Heading size={3}>MAJOR.MINOR.PATCH</Heading>
+          <a href="https://semver.org/">Specifications</a>
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>Semver</Heading>
+          <Heading size={3}>1.0.0</Heading>
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l1-example/semver-1.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>Semver</Heading>
+          <Heading size={3}>1.0.1</Heading>
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l1-example/semver-2.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>Semver</Heading>
+          <Heading size={3}>1.1.0</Heading>
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l1-example/semver-3.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>Semver</Heading>
+          <Heading size={3}>2.0.0</Heading>
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l1-example/semver-4.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>package.json</Heading>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderItem>Constraint</TableHeaderItem>
+                <TableHeaderItem>Range</TableHeaderItem>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableItem>1.X</TableItem>
+                <TableItem>&gt;=1.0.0 &lt;2.0.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>1.2.x</TableItem>
+                <TableItem>&gt;=1.2.0 &lt;1.3.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>~1.2.3</TableItem>
+                <TableItem>&gt;=1.2.3 &lt;1.3.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>~1.2</TableItem>
+                <TableItem>&gt;=1.2.0 &lt;1.3.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>~0</TableItem>
+                <TableItem>&gt;=0.0.0 &lt;1.0.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>^1.2.3</TableItem>
+                <TableItem>&gt;=1.2.3 &lt;2.0.0</TableItem>
+              </TableRow>
+              <TableRow>
+                <TableItem>^0.2.3</TableItem>
+                <TableItem>&gt;=0.2.3 &lt;0.3.0</TableItem>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <a href="https://docs.npmjs.com/misc/semver">Documentation</a>
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} caps>yarn.lock</Heading>
+          <CodePane
+            lang="yaml"
+            source={require('raw-loader!../assets/l1-example/yarn-1.yml')}
+            margin="20px auto"
+            overflow = "overflow"
+            textSize="18px"
+            />
+          <Notes>
+            <ul>
+              <li>
+                Faut-il le commit ?
+              </li>
+            </ul>
+          </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary" id="lesson2">
           <Heading size={1} caps>Lesson 2</Heading>
           <Heading size={2} caps>NodeJS</Heading>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
+          <Heading size={1}>
             From Server to Browser...
           </Heading>
           <Notes>
@@ -1184,23 +1301,51 @@ yarn run myCommand"
           </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            How it's work ?
-          </Heading>
-          <Notes>
-            <div>Interprété + JIT</div>
-          </Notes>
-        </Slide>
-        <Slide transition={["fade"]} bgColor="primary">
-            <Heading size={2}>
-              Engines
-            </Heading>
+            <Heading size={1}>ECMAScript Engines</Heading>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHeaderItem>Name</TableHeaderItem>
+                  <TableHeaderItem>Use by</TableHeaderItem>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableItem>SpiderMonkey</TableItem>
+                  <TableItem>Netscape, Firefox, GNOME 3</TableItem>
+                </TableRow>
+                <TableRow>
+                  <TableItem>Chakra</TableItem>
+                  <TableItem>IE, Edge</TableItem>
+                </TableRow>
+                <TableRow>
+                  <TableItem>V8</TableItem>
+                  <TableItem>Chrome</TableItem>
+                </TableRow>
+                <TableRow>
+                  <TableItem>Tamarin</TableItem>
+                  <TableItem>Adobe Flash</TableItem>
+                </TableRow>
+                <TableRow>
+                  <TableItem>Carakan</TableItem>
+                  <TableItem>Opera</TableItem>
+                </TableRow>
+                <TableRow>
+                  <TableItem>JavaScriptCore</TableItem>
+                  <TableItem>Safari</TableItem>
+                </TableRow>
+              </TableBody>
+            </Table>
             <Notes>
-              <div>Plusieures implémentations = plusieurs moteurs</div>
+              <ul>
+                <li>Une spec plusieures implémentations</li>
+                <li>Avant Chakra était pour JScript, maintenant Javascript</li>
+                <li>Tamarin supportait l'ActionScript</li>
+              </ul>
             </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-            <Heading size={2}>
+            <Heading size={1}>
               Chrome's V8 Engine
             </Heading>
             <Notes>
@@ -1208,49 +1353,36 @@ yarn run myCommand"
             </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            NodeJS
-          </Heading>
+          <Heading size={1}>How it's work ?</Heading>
+          <ol>
+            <li>Code Parsing</li>
+            <li>Interpreter and return bytecode</li>
+            <li>JIT transforms bytecode to Machine code</li>
+          </ol>
           <Notes>
-            <div>Written in C++</div>
-            <div>One Thread</div>
-            <div>Asynchronous I/O</div>
+
           </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            Module
+          <Heading size={1}>
+            NodeJS
           </Heading>
+          <Notes>
+            <ul>
+              <li>Written in C++</li>
+              <li>One Thread</li>
+              <li>Asynchronous I/O</li>
+            </ul>
+          </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            dal.js
+          <Heading size={1}>
+            Event Loop
           </Heading>
-          <CodePane
-            lang="js"
-            source={require('raw-loader!../assets/l2-example/1.js')}
-            margin="20px auto"
-            overflow = "overflow"
-            />
-        </Slide>
-        <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            function.js
-          </Heading>
-          <CodePane
-            lang="js"
-            source={require('raw-loader!../assets/l2-example/2.js')}
-            margin="20px auto"
-            overflow = "overflow"
-            />
-        </Slide>
-        <Slide transition={["fade"]} bgColor="primary">
-          <CodePane
-            lang="js"
-            source={require('raw-loader!../assets/l2-example/3.js')}
-            margin="20px auto"
-            overflow = "overflow"
-            />
+          <Image height="80%" width="80%" src={images.event_loop.replace('/', '')} />
+          <Notes>
+
+          </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <Heading size={1}>
@@ -1258,7 +1390,7 @@ yarn run myCommand"
           </Heading>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
+          <Heading size={1}>
             main.js
           </Heading>
           <CodePane
@@ -1269,6 +1401,9 @@ yarn run myCommand"
             />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1} cap>
+            run node script
+          </Heading>
           <CodePane
             lang="js"
             source="node main.js"
@@ -1277,54 +1412,33 @@ yarn run myCommand"
             />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
+          <Heading size={1}>
             HTTP
           </Heading>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            request
-          </Heading>
-          <CodePane
-            lang="http"
-            source={require('raw-loader!../assets/l2-example/5.http')}
-            margin="20px auto"
-            overflow = "overflow"
-            />
-            <CodePane
-              lang="js"
-              source={require('raw-loader!../assets/l2-example/6.js')}
-              margin="20px auto"
-              overflow = "overflow"
-              />
+          <Heading size={1}>HTTP</Heading>
+          <Image src={images.http_message.replace('/', '')} />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1}>HTTP</Heading>
+          <Image src={images.http_header.replace('/', '')} />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <CodePane
-            lang="http"
-            source={require('raw-loader!../assets/l2-example/5.http')}
+            lang="js"
+            source={require('raw-loader!../assets/l2-example/7.js')}
             margin="20px auto"
             overflow = "overflow"
             />
-            <CodePane
-              lang="js"
-              source={require('raw-loader!../assets/l2-example/7.js')}
-              margin="20px auto"
-              overflow = "overflow"
-              />
-        </Slide>
-        <Slide transition={["fade"]} bgColor="primary">
-          <CodePane
-            lang="http"
-            source={require('raw-loader!../assets/l2-example/5.http')}
-            margin="20px auto"
-            overflow = "overflow"
-            />
-            <CodePane
-              lang="js"
-              source={require('raw-loader!../assets/l2-example/8.js')}
-              margin="20px auto"
-              overflow = "overflow"
-              />
+          <Notes>
+            <ul>
+              <li>pathname = "/gazouilli/6"</li>
+              <li>port = "9999"</li>
+              <li>hostname = "localhost"</li>
+              <li>query = "comment=true"</li>
+            </ul>
+          </Notes>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <CodePane
@@ -1333,12 +1447,12 @@ yarn run myCommand"
             margin="20px auto"
             overflow = "overflow"
             />
-            <CodePane
-              lang="js"
-              source={require('raw-loader!../assets/l2-example/10.js')}
-              margin="20px auto"
-              overflow = "overflow"
-              />
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l2-example/10.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <Heading size={2}>
@@ -1352,37 +1466,74 @@ yarn run myCommand"
             />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            require('child_proces')
-          </Heading>
+        <Terminal title="claudusd" output={[
+            <Typist cursor={ cursor }>node assets/l2-example/10.js &</Typist>,
+            <div>[1] 16467</div>,
+            <Typist cursor={ cursor }>curl -d 'Hola' -H 'Content-Type: text/plain' http://localhost:9999</Typist>,
+            <div>Hola</div>,
+            <Typist cursor={ cursor }>kill 16467</Typist>,
+            <div>[1]+  Complété              node assets/l2-example/10.js</div>
+          ]}
+          />
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1}>require('child_process')</Heading>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <CodePane
             lang="bash"
-            source={require('raw-loader!../assets/l2-example/12.bash')}
+            source={require('raw-loader!../assets/l2-example/12.sh')}
             margin="20px auto"
             overflow = "overflow"
             />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            Controlleur
-          </Heading>
+          <Terminal title="claudusd" output={[
+              <Typist cursor={ cursor }>assets/l2-example/12.sh</Typist>,
+              <div>1</div>,
+              <div>2</div>,
+              <div>3</div>,
+              <div>4</div>,
+              <div>5</div>
+            ]}
+            />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            Routeur
-          </Heading>
+          <CodePane
+            lang="js"
+            source={require('raw-loader!../assets/l2-example/child_process-1.js')}
+            margin="20px auto"
+            overflow = "overflow"
+            />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
-          <Heading size={2}>
-            Middleware
-          </Heading>
+          <Terminal title="claudusd" output={[
+              <Typist cursor={ cursor }>node assets/l2-example/child_process-1.js</Typist>,
+              <div>stdout: 1</div>,
+              <br />,
+              <div>stdout: 2</div>,
+              <br />,
+              <div>stdout: 3</div>,
+              <br />,
+              <div>stdout: 4</div>,
+              <br />,
+              <div>stdout: 5</div>,
+              <br />,
+              <div>child process exited with code 0</div>
+            ]}
+            />
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <Heading size={1}>
-            Express
+            require('forever')
           </Heading>
+          <a href="https://www.npmjs.com/package/forever">NPM page</a>
+        </Slide>
+        <Slide transition={["fade"]} bgColor="primary">
+          <Heading size={1}>
+            require('express');
+          </Heading>
+          <a href="https://www.npmjs.com/package/express">NPM page</a>
         </Slide>
         <Slide transition={["fade"]} bgColor="primary">
           <Heading size={1} caps>Lesson 3</Heading>
